@@ -3,16 +3,30 @@ import { StyleSheet, Text, View, StatusBar, TextInput, Dimensions, Platform } fr
 
 const { height, width } = Dimensions.get('window');
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <Text style={styles.title}>Kawai To Do</Text>
-      <View style={styles.card}>
-        <TextInput style={styles.Input} placeholder={"New To Do"} />
+export default class App extends React.Component {
+
+  state = {
+    newToDo: ""
+  }
+
+  render() {
+    const { newToDo } = this.state;
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <Text style={styles.title}>Kawai To Do</Text>
+        <View style={styles.card}>
+          <TextInput style={styles.Input} placeholder={"New To Do"} value={newToDo} onChangeText={this.__controlNewToDo} placeholderTextColor={"#999"} autoCorrect={false} />
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
+
+  __controlNewToDo = text => {
+    this.setState({
+      newToDo: text
+    })
+  }
 }
 
 const styles = StyleSheet.create({
@@ -50,6 +64,9 @@ const styles = StyleSheet.create({
     })
   },
   Input: {
-
+    padding: 20,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 1,
+    fontSize: 25
   }
 });
