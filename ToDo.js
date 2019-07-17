@@ -1,23 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
 export default class ToDo extends React.Component {
     state = {
         isEditing: false,
-        isCompleted: false
+        isCompleted: false,
+        toDoValue: ""
     }
 
     render() {
-        const { isEditing, isCompleted } = this.state;
+        const { isEditing, isCompleted, toDoValue } = this.state;
+        const { text } = this.props;
         return (
             <View style={styles.container}>
                 <View style={styles.column}>
                     <TouchableOpacity onPress={this.__toggleToDo}>
                         <View style={[styles.circle, isCompleted ? styles.completedCircle : styles.uncompletedCircle]} />
                     </TouchableOpacity>
-                    <Text style={[styles.text, isCompleted ? styles.completedText : styles.uncompletedText]}>Hello I'm a to do</Text>
+                    {isEditing ?
+                        <TextInput style={[styles.text, styles.input, isCompleted ? styles.completedText : styles.uncompletedText]} value={toDoValue} multiline={true} onChangeText={this.__controllInput} onBlur={this.__finishEditing} />
+                        : <Text style={[styles.text, isCompleted ? styles.completedText : styles.uncompletedText]}>{text}
+                        </Text>}
                 </View>
 
                 {isEditing ?
@@ -53,14 +58,22 @@ export default class ToDo extends React.Component {
     }
 
     __startEditing = () => {
+        const { text } = this.props;
         this.setState({
-            isEditing: true
+            isEditing: true,
+            toDoValue: text
         })
     }
 
     __finishEditing = () => {
         this.setState({
             isEditing: false
+        })
+    }
+
+    __controllInput = (text) => {
+        this.setState({
+            toDoValue: text
         })
     }
 }
@@ -111,5 +124,8 @@ const styles = StyleSheet.create({
     actionContainer: {
         marginVertical: 10,
         marginHorizontal: 10
+    },
+    input: {
+        marginVertical: 20,
     }
 })
